@@ -16,11 +16,11 @@ from logger_config import logger
 # Initialize FastAPI app
 app = FastAPI(title="SafeZone AI API", version="1.0.0")
 
-account_sid = 'AC023e4c1f37a5a0811de004384d1ed575'
-auth_token = 'a81a385910aea745fa9b3848b2c1be64'
+account_sid = ''
+auth_token = ''
 
 twilio_phone_number = '+18149626276'
-recipient_phone_number = '+919789524300'
+recipient_phone_number = ''
 
 # Configure CORS
 app.add_middleware(
