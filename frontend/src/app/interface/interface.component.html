@@ -1,0 +1,124 @@
+<div class="container" *ngIf="isBrowser">
+  <header>
+    <h1>🛡️ SafeZone AI - Helmet Detection System</h1>
+    <p>Real-time helmet detection with region selection</p>
+  </header>
+
+  <div class="main-content">
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <div class="section">
+        <h3>Video Source</h3>
+        
+        <button (click)="startWebcam()" [disabled]="isDetecting" class="btn btn-primary">
+          📹 Webcam
+        </button>
+        
+        <div class="file-upload">
+          <label for="videoFile" class="btn btn-secondary" [class.disabled]="isDetecting">
+            📁 Upload Video
+          </label>
+          <input 
+            id="videoFile" 
+            type="file" 
+            accept="video/*" 
+            (change)="onVideoFileSelected($event)"
+            [disabled]="isDetecting"
+            style="display: none;"
+          />
+        </div>
+
+        <div class="rtsp-input">
+          <input 
+            type="text" 
+            [(ngModel)]="rtspUrl" 
+            placeholder="rtsp://example.com/stream"
+            [disabled]="isDetecting"
+            class="input-field"
+          />
+          <button (click)="connectRTSP()" [disabled]="isDetecting" class="btn btn-secondary">
+            🌐 Connect RTSP
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Region Selection</h3>
+        <p class="info-text">
+          {{ selectedRegion ? '✅ Region selected' : '⚠️ Draw a box on the video' }}
+        </p>
+        <button (click)="clearRegion()" [disabled]="isDetecting" class="btn btn-warning">
+          🔄 Clear Region
+        </button>
+      </div>
+
+      <div class="section">
+        <h3>Detection Control</h3>
+        <button 
+          *ngIf="!isDetecting" 
+          (click)="startDetection()" 
+          [disabled]="!selectedRegion"
+          class="btn btn-success"
+        >
+          ▶️ Start Detection
+        </button>
+        
+        <button 
+          *ngIf="isDetecting" 
+          (click)="stopDetection()" 
+          class="btn btn-danger"
+        >
+          ⏹️ Stop Detection
+        </button>
+      </div>
+
+      <div class="section" *ngIf="selectedRegion">
+        <h3>Region Info</h3>
+        <div class="region-info">
+          <p><strong>X:</strong> {{ selectedRegion.x | number:'1.0-0' }}px</p>
+          <p><strong>Y:</strong> {{ selectedRegion.y | number:'1.0-0' }}px</p>
+          <p><strong>Width:</strong> {{ selectedRegion.width | number:'1.0-0' }}px</p>
+          <p><strong>Height:</strong> {{ selectedRegion.height | number:'1.0-0' }}px</p>
+        </div>
+      </div>
+
+      <!-- Live Detection Stats -->
+      <div class="section" *ngIf="isDetecting && currentDetections.length > 0">
+        <h3>Current Detections</h3>
+        <div class="detection-badges">
+          <span 
+            *ngFor="let det of currentDetections"
+            [class.helmet]="det.class_name.toLowerCase().includes('helmet') && !det.class_name.toLowerCase().includes('no')"
+            [class.no-helmet]="!det.class_name.toLowerCase().includes('helmet') || det.class_name.toLowerCase().includes('no')"
+            [class.vest]="det.class_name.toLowerCase().includes('vest')"
+            class="detection-badge"
+          >
+            {{ det.class_name }}: {{ (det.confidence * 100).toFixed(0) }}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Display - Full Width -->
+    <div class="video-section">
+      <div class="canvas-container-main">
+        <h3>
+          {{ isDetecting ? '🔴 Live Detection' : '📹 Video Feed' }}
+        </h3>
+        <video #videoElement style="display: none;"></video>
+        <canvas 
+          #videoCanvas
+          (mousedown)="onMouseDown($event)"
+          (mousemove)="onMouseMove($event)"
+          (mouseup)="onMouseUp($event)"
+          [style.cursor]="isDetecting ? 'not-allowed' : 'crosshair'"
+        ></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading message for SSR -->
+<div *ngIf="!isBrowser" class="ssr-message">
+  <p>Loading SafeZone AI...</p>
+</div>

@@ -24,7 +24,31 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*.log
 MANIFEST
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+/out-tsc/
+
+# IDEs
+.vscode/
+.idea/
+
+# Angular cache
+.angular/
+.sass-cache/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
