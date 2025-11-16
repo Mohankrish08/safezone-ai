@@ -18,9 +18,9 @@ export class PythonApiService {
   private http = inject(HttpClient);
   
   // API Configuration
-  private readonly API_URL = 'http://localhost:5000';
-  private readonly WS_URL = 'ws://localhost:5000/ws';
-  
+  private readonly API_URL = 'https://safezone-ai-h9lt.onrender.com';
+  private readonly WS_URL = 'wss://safezone-ai-h9lt.onrender.com/ws';
+
   // WebSocket
   private socket$!: WebSocketSubject<DetectionResult>;
   private detectionResults$ = new Subject<DetectionResult>();
