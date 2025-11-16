@@ -2,7 +2,7 @@ import asyncio
 import base64
 import cv2
 import time
-from app import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict, Optional, List
 from ultralytics import YOLO
@@ -23,7 +23,7 @@ twilio_phone_number = '+18149626276'
 recipient_phone_number = ''
 
 # Configure CORS
-app.add_middleware(
+app.add_middleware( 
     CORSMiddleware,
     allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
