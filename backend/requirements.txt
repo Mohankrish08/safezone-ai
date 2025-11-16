@@ -6,3 +6,4 @@ ultralytics==8.3.0
 pydantic==2.9.0
 websockets==13.1
 numpy==1.26.4
+twilio
